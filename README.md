@@ -2,16 +2,19 @@
 
 ## 🗄️ Backend Repository
 
-This frontend connects to the backend API available at:
+Looking for the **backend**? It’s available here 👇
 
-- [dkg1212/task-manager-app (Backend Repo)](https://github.com/dkg1212/task-manager-app)
+[![Backend Repo](https://img.shields.io/badge/GitHub-Backend%20Repo-181717?logo=github&style=for-the-badge)](https://github.com/dkg1212/task-manager-app)
 
-Please follow the backend repo's README for setup and API details.
-# Task Manager App (Frontend)
-
-A modern, responsive, and feature-rich task management web app built with Next.js 14, React, and Tailwind CSS v4.1+. This is the **frontend** for the Task Manager project.
+📌 **Setup & API Docs:**  
+Head over to the backend repository and follow its README for complete **installation, environment setup, and API usage details**.
 
 ---
+# 📝 Task Manager App (Frontend)
+
+A modern, responsive, and feature-rich task management web app built with **Next.js 14**, **React**, and **Tailwind CSS v4.1+**.  
+This is the **frontend** for the Task Manager project.
+
 
 ## 🚀 Features
 

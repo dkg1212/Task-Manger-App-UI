@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import api from '../lib/api';
-import { motion } from 'framer-motion';
+import { motion, number } from 'framer-motion';
 
 interface TaskFormProps {
   onTaskCreated?: () => void;
@@ -50,7 +50,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
   return (
     <motion.form
       onSubmit={handleSubmit}
-      className="flex flex-col md:flex-row gap-3 items-center mb-6"
+      className="max-w-2xl mx-auto backdrop-blur-xl bg-white/70 dark:bg-black/50 p-8 rounded-2xl 
+      shadow-lg border border-white/20 dark:border-white/30 relative z-10 "
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -61,19 +62,23 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
         value={title}
         onChange={e => setTitle(e.target.value)}
         required
-        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+        className='w-full flex-1 p-3 outline-none border rounded-md bg-white/80 dark:bg-[#2a004a]/40 
+            border-gray-300 dark:border-white/40 focus:ring-2 focus:ring-purple-400 my-2 text-black dark:text-white'
       />
-      <input
-        type="text"
+      <textarea
+        rows={6}
         placeholder="Description (optional)"
         value={description}
         onChange={e => setDescription(e.target.value)}
-        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+        
+        className='w-full p-4 outline-none border rounded-md bg-white/80 dark:bg-[#2a004a]/40 
+          border-gray-300 dark:border-white/40 focus:ring-2 focus:ring-orange-400 text-black dark:text-white'
       />
+      
       <select
         value={priority}
         onChange={e => setPriority(Number(e.target.value))}
-        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+        className="flex-1 w-2/3 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
       >
         <option value={5}>High</option>
         <option value={4}>Above Average</option>
@@ -85,7 +90,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
         type="submit"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className={`px-6 py-2 rounded-lg text-white font-semibold transition ${
+        className={`px-6 py-3  rounded-lg text-white text-xs font-semibold transition absolute right-8 ${
           loading ? 'bg-blue-300 dark:bg-blue-800 cursor-not-allowed' : 'bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800'
         }`}
         disabled={loading}

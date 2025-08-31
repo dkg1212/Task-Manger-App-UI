@@ -14,6 +14,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
   const [description, setDescription] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [priority, setPriority] = useState(3); // Default medium
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,14 +24,21 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
       const token = localStorage.getItem('token');
       if (!token) throw new Error('Unauthorized');
 
+
+
       const res = await api.post(
         '/tasks',
-        { title, description },
+        { title, description, priority },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      // Save priority in localStorage by task ID
+      const localPriorities = JSON.parse(localStorage.getItem("taskPriorities") || "{}")
+      localPriorities[res.data._id] = priority;
+      localStorage.setItem("taskPriorities", JSON.stringify(localPriorities));
 
-      setTitle('');
-      setDescription('');
+  setTitle('');
+  setDescription('');
+  setPriority(3);
       if (onTaskCreated) onTaskCreated();
     } catch (err: unknown) {
       setError('Failed to create task. Make sure you are logged in.');
@@ -62,6 +70,17 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
         onChange={e => setDescription(e.target.value)}
         className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
       />
+      <select
+        value={priority}
+        onChange={e => setPriority(Number(e.target.value))}
+        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
+      >
+        <option value={5}>High</option>
+        <option value={4}>Above Average</option>
+        <option value={3}>Medium</option>
+        <option value={2}>Low</option>
+        <option value={1}>Very Low</option>
+      </select>
       <motion.button
         type="submit"
         whileHover={{ scale: 1.05 }}

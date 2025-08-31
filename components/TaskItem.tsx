@@ -10,7 +10,9 @@ type TaskItemProps = {
   title: string;
   description?: string;
   completed: boolean;
+  priority?: number;
   onStatusChange?: () => void;
+  showPriority?: boolean;
 };
 
 const TaskItem: React.FC<TaskItemProps> = ({
@@ -18,11 +20,14 @@ const TaskItem: React.FC<TaskItemProps> = ({
   title: initialTitle,
   description: initialDescription,
   completed,
+  priority,
   onStatusChange,
+  showPriority = false,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(initialTitle);
   const [description, setDescription] = useState(initialDescription || "");
+  const [editPriority, setEditPriority] = useState(priority ?? 3);
   const [loading, setLoading] = useState(false);
 
   const token = localStorage.getItem("token");
@@ -66,9 +71,13 @@ const TaskItem: React.FC<TaskItemProps> = ({
     try {
       await api.put(
         `/tasks/${_id}`,
-        { title, description, completed },
+        { title, description, completed, priority: editPriority },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+      // Save priority in localStorage by task ID
+      const localPriorities = JSON.parse(localStorage.getItem("taskPriorities") || "{}")
+      localPriorities[_id] = editPriority;
+      localStorage.setItem("taskPriorities", JSON.stringify(localPriorities));
       setIsEditing(false);
       onStatusChange?.();
     } catch (err) {
@@ -119,6 +128,17 @@ const TaskItem: React.FC<TaskItemProps> = ({
               className="px-3 py-2 rounded border dark:bg-gray-700 dark:text-gray-100"
               placeholder="Description"
             />
+            <select
+              value={editPriority}
+              onChange={e => setEditPriority(Number(e.target.value))}
+              className="px-3 py-2 rounded border dark:bg-gray-700 dark:text-gray-100"
+            >
+              <option value={5}>High</option>
+              <option value={4}>Above Average</option>
+              <option value={3}>Medium</option>
+              <option value={2}>Low</option>
+              <option value={1}>Very Low</option>
+            </select>
             <div className="flex gap-2">
               <motion.button
                 type="submit"
@@ -149,6 +169,11 @@ const TaskItem: React.FC<TaskItemProps> = ({
             </span>
             {description && (
               <span className="text-sm text-gray-500 dark:text-gray-300">{description}</span>
+            )}
+            {showPriority && priority !== undefined && (
+              <span className="ml-2 inline-block px-2 py-0.5 text-xs rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-semibold">
+                Priority: {priority}
+              </span>
             )}
           </div>
         )}

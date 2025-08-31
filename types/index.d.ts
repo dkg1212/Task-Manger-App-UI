@@ -10,4 +10,5 @@ export interface Task {
   description?: string;
   completed: boolean;
   user: string;
+  priority?: number; // 1 (Low) - 5 (High)
 }

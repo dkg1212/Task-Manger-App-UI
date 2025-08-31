@@ -22,6 +22,7 @@ const TasksPage = () => {
     "all"
   );
 
+  // Merge priorities from localStorage into tasks
   const fetchTasks = async () => {
     setLoading(true);
     setError("");
@@ -30,7 +31,12 @@ const TasksPage = () => {
       const res = await api.get("/tasks", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setTasks(res.data);
+      const localPriorities = JSON.parse(localStorage.getItem("taskPriorities") || "{}");
+      const merged = res.data.map((task: any) => ({
+        ...task,
+        priority: localPriorities[task._id] ?? task.priority ?? 3,
+      }));
+      setTasks(merged);
     } catch (err: unknown) {
       setError("Failed to fetch tasks");
     } finally {
@@ -45,12 +51,15 @@ const TasksPage = () => {
   const completedTasks = tasks.filter((task) => task.completed);
   const pendingTasks = tasks.filter((task) => !task.completed);
 
-  const filteredTasks =
+  let filteredTasks =
     activeTab === "all"
       ? tasks
       : activeTab === "completed"
       ? completedTasks
       : pendingTasks;
+
+  // Always sort by priority (high to low)
+  filteredTasks = [...filteredTasks].sort((a, b) => (b.priority ?? 0) - (a.priority ?? 0));
 
   const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
@@ -123,6 +132,16 @@ const TasksPage = () => {
           <TaskForm onTaskCreated={fetchTasks} />
         </div>
 
+        {/* Priorities Legend */}
+        <div className="flex justify-end mb-2">
+          <div className="flex gap-2 text-xs">
+            <span className="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-semibold">5: High</span>
+            <span className="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-semibold">4: Above Avg</span>
+            <span className="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-semibold">3: Medium</span>
+            <span className="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-semibold">2: Low</span>
+            <span className="px-2 py-1 rounded bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-semibold">1: Very Low</span>
+          </div>
+        </div>
         {/* Tasks List */}
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="tasks">
@@ -173,7 +192,9 @@ const TasksPage = () => {
                                 title={task.title}
                                 description={task.description}
                                 completed={task.completed}
+                                priority={task.priority}
                                 onStatusChange={fetchTasks}
+                                showPriority
                               />
                             </motion.div>
                           </li>

@@ -53,27 +53,27 @@ const TaskForm: React.FC<TaskFormProps> = ({ onTaskCreated }) => {
         value={title}
         onChange={e => setTitle(e.target.value)}
         required
-        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
       />
       <input
         type="text"
         placeholder="Description (optional)"
         value={description}
         onChange={e => setDescription(e.target.value)}
-        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
       />
       <motion.button
         type="submit"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className={`px-6 py-2 rounded-lg text-white font-semibold transition ${
-          loading ? 'bg-blue-300 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-600'
+          loading ? 'bg-blue-300 dark:bg-blue-800 cursor-not-allowed' : 'bg-blue-500 dark:bg-blue-700 hover:bg-blue-600 dark:hover:bg-blue-800'
         }`}
         disabled={loading}
       >
         {loading ? 'Adding...' : 'Add Task'}
       </motion.button>
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+  {error && <p className="text-red-500 mt-2">{error}</p>}
     </motion.form>
   );
 };

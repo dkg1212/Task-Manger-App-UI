@@ -37,21 +37,21 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 p-4">
+  <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-indigo-500 to-purple-600 dark:bg-gradient-to-r dark:from-gray-900 dark:to-gray-800 p-4 transition-colors duration-300">
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
-        className="w-full max-w-md bg-white shadow-2xl rounded-2xl p-8"
+        className="w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl rounded-2xl p-8 transition-colors duration-300"
       >
-        <h1 className="text-2xl font-bold text-center text-gray-800 mb-6">
+  <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100 mb-6">
           Welcome Back 👋
         </h1>
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
               Email
             </label>
             <input
@@ -60,13 +60,13 @@ const LoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none"
+              className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
             />
           </div>
 
           {/* Password with toggle */}
           <div>
-            <label className="block text-sm font-medium text-gray-600">
+            <label className="block text-sm font-medium text-gray-600 dark:text-gray-300">
               Password
             </label>
             <div className="relative">
@@ -76,12 +76,12 @@ const LoginPage = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none pr-10"
+                className="w-full mt-1 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-indigo-400 focus:outline-none pr-10 dark:bg-gray-800 dark:text-gray-100 dark:border-gray-700"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 focus:outline-none"
+                className="absolute inset-y-0 right-3 flex items-center text-gray-500 dark:text-gray-300 hover:text-gray-700 dark:hover:text-gray-100 focus:outline-none"
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
@@ -93,7 +93,7 @@ const LoginPage = () => {
             whileTap={{ scale: 0.95 }}
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition"
+            className="w-full py-2 px-4 bg-indigo-600 dark:bg-indigo-700 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 dark:hover:bg-indigo-800 transition"
           >
             {loading ? "Logging in..." : "Login"}
           </motion.button>
@@ -111,11 +111,11 @@ const LoginPage = () => {
         )}
 
         {/* Redirect */}
-        <p className="mt-6 text-center text-sm text-gray-500">
+  <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-300">
           Don’t have an account?{" "}
           <span
             onClick={() => router.push("/signup")}
-            className="text-indigo-600 cursor-pointer font-medium hover:underline"
+            className="text-indigo-600 dark:text-indigo-400 cursor-pointer font-medium hover:underline"
           >
             Sign up
           </span>

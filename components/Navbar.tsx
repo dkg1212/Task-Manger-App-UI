@@ -3,15 +3,20 @@ import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useAuth } from "../context/AuthContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Moon, Sun } from "lucide-react";
+import { useDarkMode } from "../context/DarkModeContext";
+import { useRouter } from "next/navigation";
+import { ClipboardList } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useAuth();
+  const { darkMode, toggleDarkMode } = useDarkMode();
   const [isOpen, setIsOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-const [mounted, setMounted] = useState(false);
-useEffect(() => setMounted(true), []);
+  const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+  useEffect(() => setMounted(true), []);
 
   // Close dropdown if clicked outside
   useEffect(() => {
@@ -30,22 +35,38 @@ useEffect(() => setMounted(true), []);
   const handleLogout = () => {
     logout();
     localStorage.removeItem("token");
+    router.push("/")
     setUserMenuOpen(false);
     setIsOpen(false);
   };
-if (!mounted) {
-  return null; // or a loading skeleton
-}
+  if (!mounted) {
+    return null; // or a loading skeleton
+  }
   return (
-    <nav className="bg-white shadow-md sticky top-0 z-50">
+    <nav className="bg-white dark:bg-gray-900 shadow-md sticky top-0 z-50 transition-colors duration-300">
       <div className={" mx-auto px-4 py-3 flex items-center justify-between"}>
         {/* Logo */}
-        <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-500 transition">
-          Task Manager
+        <Link
+          href="/"
+          className="flex items-center gap-2 group"
+        >
+          <div className="bg-blue-600 text-white p-2 rounded-2xl shadow-lg group-hover:rotate-6 group-hover:scale-105 transition">
+            <ClipboardList size={28} />
+          </div>
+          <span className="text-3xl font-extrabold bg-gradient-to-r from-blue-600 via-purple-500 to-pink-500 bg-clip-text text-transparent tracking-tight group-hover:opacity-90 transition">
+            Task Manager
+          </span>
         </Link>
-
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-6 items-center">
+          {/* Dark mode toggle */}
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            aria-label="Toggle dark mode"
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
           {!user ? (
             <>
               <Link
@@ -107,14 +128,23 @@ if (!mounted) {
           )}
         </div>
 
-        {/* Mobile Menu Toggle Button */}
-        <motion.button
-          onClick={() => setIsOpen(!isOpen)}
-          className="md:hidden text-gray-700 hover:text-blue-600 transition"
-          whileTap={{ scale: 0.9 }}
-        >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </motion.button>
+        {/* Mobile Menu Toggle Button & Dark mode toggle */}
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={toggleDarkMode}
+            className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-yellow-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+            aria-label="Toggle dark mode"
+          >
+            {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+          </button>
+          <motion.button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-gray-700 dark:text-gray-200 hover:text-blue-600 transition"
+            whileTap={{ scale: 0.9 }}
+          >
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
+          </motion.button>
+        </div>
       </div>
 
       {/* Mobile Dropdown Menu */}

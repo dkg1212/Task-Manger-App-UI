@@ -39,6 +39,12 @@ export default function Home() {
           <a
             href="/tasks"
             className="px-6 py-3 bg-blue-600 dark:bg-blue-700 text-white rounded-xl shadow-lg hover:bg-blue-700 dark:hover:bg-blue-800 transition"
+            onClick={e => {
+              if (!user) {
+                e.preventDefault();
+                alert("Please login to see your tasks.");
+              }
+            }}
           >
             View Tasks
           </a>
